@@ -40,3 +40,7 @@
                                      :current-face :punch
                                      :faces [:punch :heal :shields :punches :shovel :skull]}]
           [:wait 2000]])))
+
+(deftest use-reroll
+  (is (= (sut/event->actions [:use-reroll 1])
+         [[:assoc-in [:player :used-rerolls] 1]])))

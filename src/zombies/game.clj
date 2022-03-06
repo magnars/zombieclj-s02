@@ -24,3 +24,6 @@
                    :current-face (nth faces (mod (.nextInt rng) (count faces)))
                    :faces faces})]
      [:set-player-rerolls 2]]))
+
+(defn reroll [_]
+  [[:use-reroll 1]])

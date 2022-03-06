@@ -1,6 +1,6 @@
 (ns zombies.client.main
   (:require [chord.client :refer [ws-ch]]
-            [cljs.core.async :refer [<! close!]]
+            [cljs.core.async :refer [<! close! put!]]
             [dumdom.core :as dumdom]
             [zombies.client.actions :as actions]
             [zombies.client.components :refer [Page]]
@@ -23,6 +23,7 @@
           (recur))))))
 
 (bus/watch ::me :perform-actions #(actions/perform-actions store %))
+(bus/watch ::me :send-command #(put! @ws-atom %))
 
 (defn render [& _]
   (dumdom/render (Page @store) container))

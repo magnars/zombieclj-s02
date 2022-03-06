@@ -32,6 +32,13 @@
           faces
           (range))]]])
 
+(defcomponent Rerolls [{:keys [rerolls used-rerolls]}]
+  [:div.rerolls {:onClick #(bus/publish [:send-command [:reroll]])}
+   (let [num (or rerolls 0)
+         used (or used-rerolls 0)]
+     (for [i (range num)]
+       [:div.reroll {:className (when (< i used) "used")}]))])
+
 (defcomponent Page [{:keys [zombies tips player dice server-error]}]
   (if server-error
     [:h1 server-error]
@@ -46,7 +53,5 @@
       [:div.dice-row
        (->> (map Die (vals dice))
             (interpose [:div.dice-spacing]))
-       [:div.rerolls
-        (for [_ (range (:rerolls player 0))]
-          [:div.reroll])]]]
+       (Rerolls player)]]
      (when tips (Tips tips))]))
