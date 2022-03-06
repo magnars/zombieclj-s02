@@ -19,7 +19,6 @@
 
 (comment
   (start)
-  (cljs)
   (stop)
   (reset)
   )

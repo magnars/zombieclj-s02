@@ -85,6 +85,7 @@ body {background: #ddf; margin: 0;}
     animation-iteration-count: 1;
     animation-duration: 1.8s;
     transition: transform 300ms ease;
+    animation-fill-mode: both;
 }
 
 .die.using {
@@ -107,20 +108,20 @@ body {background: #ddf; margin: 0;}
 .entering.die {animation-name: entering; }
 
 .die-0 {}
-.die-1 {animation-delay: 30ms;}
-.die-2 {animation-delay: 60ms;}
-.die-3 {animation-delay: 90ms;}
-.die-4 {animation-delay: 120ms;}
-.die-5 {animation-delay: 150ms;}
-.die-6 {animation-delay: 180ms;}
+.die-1 {animation-delay: 100ms;}
+.die-2 {animation-delay: 200ms;}
+.die-3 {animation-delay: 300ms;}
+.die-4 {animation-delay: 400ms;}
+.die-5 {animation-delay: 500ms;}
+.die-6 {animation-delay: 600ms;}
 
 .die-0 .cube {}
-.die-1 .cube {animation-delay: 30ms;}
-.die-2 .cube {animation-delay: 60ms;}
-.die-3 .cube {animation-delay: 90ms;}
-.die-4 .cube {animation-delay: 120ms;}
-.die-5 .cube {animation-delay: 150ms;}
-.die-6 .cube {animation-delay: 180ms;}
+.die-1 .cube {animation-delay: 100ms;}
+.die-2 .cube {animation-delay: 200ms;}
+.die-3 .cube {animation-delay: 300ms;}
+.die-4 .cube {animation-delay: 400ms;}
+.die-5 .cube {animation-delay: 500ms;}
+.die-6 .cube {animation-delay: 600ms;}
 
 .punch {background: url(/img/one-punch.png);}
 .punches {background: url(/img/two-punch.png);}

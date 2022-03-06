@@ -22,14 +22,25 @@
     (for [_ (range max-health)]
       [:div.heart])]])
 
-(defcomponent Page [{:keys [zombies tips player]}]
+(defcomponent Die [{:keys [id current-face faces entering?]}]
+  [:div.die-w-lock
+   [:div.die {:className (when entering? "entering")}
+    [:div.cube {:className (str "facing-" (.indexOf faces current-face))}
+     (map (fn [face i]
+            [:div.face {:className (str "face-" i " " (name face))}])
+          faces
+          (range))]]])
+
+(defcomponent Page [{:keys [zombies tips player dice]}]
   [:div.page
    [:div.surface
     [:div.skyline
      (for [i (range 16)]
        [:div.building {:className (str "building-" i)}])]
     [:div.zombies
-     (for [zombie (vals zombies)]
-       [Zombie zombie])]
-    (when player (Player player))]
+     (map Zombie (vals zombies))]
+    (when player (Player player))
+    [:div.dice-row
+     (->> (map Die (vals dice))
+          (interpose [:div.dice-spacing]))]]
    (when tips (Tips tips))])
