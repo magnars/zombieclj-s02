@@ -24,7 +24,8 @@
 
 (defcomponent Die [{:keys [id current-face faces entering?]}]
   [:div.die-w-lock
-   [:div.die {:className (when entering? "entering")}
+   [:div.die {:className (str (name id)
+                              (when entering? " entering"))}
     [:div.cube {:className (str "facing-" (.indexOf faces current-face))}
      (map (fn [face i]
             [:div.face {:className (str "face-" i " " (name face))}])

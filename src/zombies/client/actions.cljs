@@ -5,14 +5,19 @@
 
 (defn perform-actions [store actions]
   (go
-    (loop [remaining-actions (seq actions)]
-      (when remaining-actions
-        (prn (first remaining-actions))
-        (match (first remaining-actions)
+    (loop [[action & next-actions] actions]
+      (when action
+        (prn action)
+        (match action
           [:assoc-in path v] (do (swap! store assoc-in path v)
-                                 (recur (next remaining-actions)))
-          [:show-tips tips] (swap! store assoc-in [:tips]
-                                   (assoc tips :action [:perform-actions (into [[:assoc-in [:tips] nil]]
-                                                                               (next remaining-actions))]))
+                                 (recur next-actions))
+          [:show-tips tips] (let [id (some-> (:id tips) name)]
+                              (if (and id (js/localStorage.getItem id))
+                                (recur next-actions)
+                                (do
+                                  (swap! store assoc-in [:tips]
+                                         (assoc tips :action [:perform-actions (into [[:assoc-in [:tips] nil]]
+                                                                                     next-actions)]))
+                                  (when id (js/localStorage.setItem id "seen")))))
           [:wait ms] (do (<! (timeout ms))
-                         (recur (next remaining-actions))))))))
+                         (recur next-actions)))))))

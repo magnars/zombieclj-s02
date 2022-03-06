@@ -12,8 +12,7 @@
   (is (= (sut/event->actions [:show-tips {:position :at-zombies
                                           :header "Zombiene kommer!"
                                           :prose "Det er zombier overalt."}])
-         [[:wait 1000]
-          [:show-tips {:position :at-zombies
+         [[:show-tips {:position :at-zombies
                        :header "Zombiene kommer!"
                        :prose "Det er zombier overalt."}]])))
 

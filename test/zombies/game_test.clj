@@ -5,11 +5,13 @@
 (deftest kickstart-game
   (is (= (sut/kickstart-game 0)
          [[:add-zombie {:id :zombie-1 :kind 1 :max-health 5}]
-          [:show-tips {:position :at-zombies
+          [:show-tips {:id :zombies-intro
+                       :position :at-zombies
                        :header "Zombiene kommer!"
                        :prose "Det er zombier overalt. En av dem har oppdaget deg. Du har også sett tre andre i nærheten."}]
           [:set-player-health 9]
-          [:show-tips {:position :at-player-health
+          [:show-tips {:id :player-health-intro
+                       :position :at-player-health
                        :header "Dine helsepoeng"
                        :prose "Disse små hjertene er alt som står mellom deg og de vandøde."}]
           [:add-die {:id :die-0
