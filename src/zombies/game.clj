@@ -1,4 +1,5 @@
-(ns zombies.game)
+(ns zombies.game
+  (:require [clojure.core.match :refer [match]]))
 
 (def zombie
   {:id :zombie-1
@@ -25,5 +26,16 @@
                    :faces faces})]
      [:set-player-rerolls 2]]))
 
-(defn reroll [_]
-  [[:use-reroll 1]])
+(defn reroll [{:keys [player]}]
+  (let [target-reroll (inc (:used-rerolls player 0))]
+    (when (<= target-reroll (:rerolls player 0))
+      [[:use-reroll target-reroll]])))
+
+(defn update-game [game event]
+  (match event
+    [:add-dice dice] (update game :dice merge (into {} (map (juxt :id identity) dice)))
+    [:add-zombie zombie] (assoc-in game [:zombies (:id zombie)] zombie)
+    [:set-player-health n] (assoc-in game [:player :max-health] n)
+    [:set-player-rerolls n] (assoc-in game [:player :rerolls] n)
+    [:show-tips tips] game
+    [:use-reroll n] (assoc-in game [:player :used-rerolls] n)))
