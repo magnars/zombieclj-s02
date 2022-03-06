@@ -6,5 +6,8 @@
 (defn start [ws-channel]
   (put! ws-channel {})
   (put! ws-channel
-        (let [events (game/kickstart-game (System/currentTimeMillis))]
-          (mapcat actionizer/event->actions events))))
+        (try
+          (let [events (game/kickstart-game (System/currentTimeMillis))]
+            (mapcat actionizer/event->actions events))
+          (catch Exception e
+            [[:assoc-in [:server-error] (.getMessage e)]]))))

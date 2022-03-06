@@ -32,16 +32,21 @@
           faces
           (range))]]])
 
-(defcomponent Page [{:keys [zombies tips player dice]}]
-  [:div.page
-   [:div.surface
-    [:div.skyline
-     (for [i (range 16)]
-       [:div.building {:className (str "building-" i)}])]
-    [:div.zombies
-     (map Zombie (vals zombies))]
-    (when player (Player player))
-    [:div.dice-row
-     (->> (map Die (vals dice))
-          (interpose [:div.dice-spacing]))]]
-   (when tips (Tips tips))])
+(defcomponent Page [{:keys [zombies tips player dice server-error]}]
+  (if server-error
+    [:h1 server-error]
+    [:div.page
+     [:div.surface
+      [:div.skyline
+       (for [i (range 16)]
+         [:div.building {:className (str "building-" i)}])]
+      [:div.zombies
+       (map Zombie (vals zombies))]
+      (when player (Player player))
+      [:div.dice-row
+       (->> (map Die (vals dice))
+            (interpose [:div.dice-spacing]))
+       [:div.rerolls
+        (for [_ (range (:rerolls player 0))]
+          [:div.reroll])]]]
+     (when tips (Tips tips))]))

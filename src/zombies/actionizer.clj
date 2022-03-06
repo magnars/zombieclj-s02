@@ -5,5 +5,8 @@
   (match event
     [:add-zombie zombie] [[:assoc-in [:zombies (:id zombie)] zombie]]
     [:show-tips tips] [event]
-    [:set-player-health n] [[:assoc-in [:player] {:max-health n}]]
-    [:add-die die] [[:assoc-in [:dice (:id die)] (assoc die :entering? true)]]))
+    [:set-player-health n] [[:assoc-in [:player :max-health] n]]
+    [:set-player-rerolls n] [[:assoc-in [:player :rerolls] n]]
+    [:add-dice dice] (concat (for [die dice]
+                               [:assoc-in [:dice (:id die)] (assoc die :entering? true)])
+                             [[:wait (+ 1800 (* 100 (count dice)))]])))

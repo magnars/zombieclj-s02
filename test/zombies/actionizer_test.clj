@@ -18,13 +18,25 @@
 
 (deftest set-player-health
   (is (= (sut/event->actions [:set-player-health 9])
-         [[:assoc-in [:player] {:max-health 9}]])))
+         [[:assoc-in [:player :max-health] 9]])))
+
+(deftest set-player-rerolls
+  (is (= (sut/event->actions [:set-player-rerolls 9])
+         [[:assoc-in [:player :rerolls] 9]])))
 
 (deftest add-die
-  (is (= (sut/event->actions [:add-die {:id :die-0
-                                        :current-face :shields
-                                        :faces [:punch :heal :shields :punches :shovel :skull]}])
+  (is (= (sut/event->actions [:add-dice [{:id :die-0
+                                          :current-face :shields
+                                          :faces [:punch :heal :shields :punches :shovel :skull]}
+                                         {:id :die-1
+                                          :current-face :punch
+                                          :faces [:punch :heal :shields :punches :shovel :skull]}]])
          [[:assoc-in [:dice :die-0] {:id :die-0
                                      :entering? true
                                      :current-face :shields
-                                     :faces [:punch :heal :shields :punches :shovel :skull]}]])))
+                                     :faces [:punch :heal :shields :punches :shovel :skull]}]
+          [:assoc-in [:dice :die-1] {:id :die-1
+                                     :entering? true
+                                     :current-face :punch
+                                     :faces [:punch :heal :shields :punches :shovel :skull]}]
+          [:wait 2000]])))

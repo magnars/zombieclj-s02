@@ -14,18 +14,19 @@
                        :position :at-player-health
                        :header "Dine helsepoeng"
                        :prose "Disse små hjertene er alt som står mellom deg og de vandøde."}]
-          [:add-die {:id :die-0
-                     :current-face :shields
-                     :faces [:punch :heal :shields :punches :shovel :skull]}]
-          [:add-die {:id :die-1
-                     :current-face :shovel
-                     :faces [:punch :heal :shields :punches :shovel :skull]}]
-          [:add-die {:id :die-2
-                     :current-face :shields
-                     :faces [:punch :heal :shields :punches :shovel :skull]}]
-          [:add-die {:id :die-3
-                     :current-face :punch
-                     :faces [:punch :heal :shields :punches :shovel :skull]}]
-          [:add-die {:id :die-4
-                     :current-face :punch
-                     :faces [:punch :heal :shields :punches :shovel :skull]}]])))
+          [:add-dice [{:id :die-0
+                       :current-face :shields
+                       :faces [:punch :heal :shields :punches :shovel :skull]}
+                      {:id :die-1
+                       :current-face :shovel
+                       :faces [:punch :heal :shields :punches :shovel :skull]}
+                      {:id :die-2
+                       :current-face :shields
+                       :faces [:punch :heal :shields :punches :shovel :skull]}
+                      {:id :die-3
+                       :current-face :punch
+                       :faces [:punch :heal :shields :punches :shovel :skull]}
+                      {:id :die-4
+                       :current-face :punch
+                       :faces [:punch :heal :shields :punches :shovel :skull]}]]
+          [:set-player-rerolls 2]])))
