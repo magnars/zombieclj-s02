@@ -6,7 +6,8 @@
             [compojure.core :refer [GET routes]]
             [compojure.route :as route]
             [integrant.core :as ig]
-            [org.httpkit.server :as server]))
+            [org.httpkit.server :as server]
+            [zombies.game-loop :as game-loop]))
 
 (def system
   {:app/config {}
@@ -19,7 +20,7 @@
 
 (defn ws-handler [req]
   (with-channel req ws-channel
-    (put! ws-channel "Hello")))
+    (game-loop/start ws-channel)))
 
 (defmethod ig/init-key :app/handler [_ _]
   (routes
