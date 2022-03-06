@@ -1,4 +1,4 @@
-{:main zombies.client.main
+{:main zombies.dev
  :optimizations :none
  :pretty-print true
  :source-map true

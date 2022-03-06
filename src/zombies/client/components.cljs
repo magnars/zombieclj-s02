@@ -5,10 +5,17 @@
   [:div.zombie-position
    [:div.zombie {:className (str "zombie-" kind)}
     [:div.zombie-health
-     (for [i (range max-health)]
+     (for [_ (range max-health)]
        [:div.heart])]]])
 
-(defcomponent Page [{:keys [zombies]}]
+(defcomponent Tips [{:keys [position header prose]}]
+  [:div.tips
+   [:div.tips-box {:className (name position)}
+    [:div.tips-arrow]
+    [:div.tips-header header]
+    [:div.tips-prose prose]]])
+
+(defcomponent Page [{:keys [zombies tips]}]
   [:div.page
    [:div.surface
     [:div.skyline
@@ -16,4 +23,6 @@
        [:div.building {:className (str "building-" i)}])]
     [:div.zombies
      (for [zombie (vals zombies)]
-       [Zombie zombie])]]])
+       [Zombie zombie])]]
+   (when tips
+     (Tips tips))])

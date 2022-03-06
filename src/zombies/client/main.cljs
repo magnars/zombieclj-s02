@@ -1,4 +1,4 @@
-(ns ^:figwheel-hooks zombies.client.main
+(ns zombies.client.main
   (:require [chord.client :refer [ws-ch]]
             [cljs.core.async :refer [<! close!]]
             [dumdom.core :as dumdom]
@@ -21,7 +21,7 @@
           (actions/perform-actions store actions)
           (recur))))))
 
-(defn ^:after-load render [& _]
+(defn render [& _]
   (dumdom/render (Page @store) container))
 
 (add-watch store ::me render)
