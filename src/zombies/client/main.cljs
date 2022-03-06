@@ -3,7 +3,8 @@
             [cljs.core.async :refer [<! close!]]
             [dumdom.core :as dumdom]
             [zombies.client.actions :as actions]
-            [zombies.client.components :refer [Page]])
+            [zombies.client.components :refer [Page]]
+            [zombies.client.event-bus :as bus])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defonce ws-atom (atom nil))
@@ -20,6 +21,8 @@
         (when-let [actions (:message (<! ws-channel))]
           (actions/perform-actions store actions)
           (recur))))))
+
+(bus/watch ::me :perform-actions #(actions/perform-actions store %))
 
 (defn render [& _]
   (dumdom/render (Page @store) container))

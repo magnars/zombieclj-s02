@@ -11,5 +11,8 @@
         (match (first remaining-actions)
           [:assoc-in path v] (do (swap! store assoc-in path v)
                                  (recur (next remaining-actions)))
+          [:show-tips tips] (swap! store assoc-in [:tips]
+                                   (assoc tips :action [:perform-actions (into [[:assoc-in [:tips] nil]]
+                                                                               (next remaining-actions))]))
           [:wait ms] (do (<! (timeout ms))
                          (recur (next remaining-actions))))))))

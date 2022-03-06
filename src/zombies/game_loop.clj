@@ -8,6 +8,11 @@
                                           :kind 1
                                           :max-health 5}]
          [:wait 1000]
-         [:assoc-in [:tips] {:position :at-zombies
-                             :header "Zombiene kommer!"
-                             :prose "Det er zombier overalt. En av dem har oppdaget deg. Du har også sett tre andre i nærheten."}]]))
+         [:show-tips {:position :at-zombies
+                      :header "Zombiene kommer!"
+                      :prose "Det er zombier overalt. En av dem har oppdaget deg. Du har også sett tre andre i nærheten."}]
+         [:assoc-in [:player] {:max-health 9}]
+         [:wait 1000]
+         [:show-tips {:position :at-player-health
+                      :header "Dine helsepoeng"
+                      :prose "Disse små hjertene er alt som står mellom deg og de vandøde."}]]))
