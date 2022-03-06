@@ -16,3 +16,10 @@
   (if (get @figwheel.main/build-registry "dev")
     (figwheel.main.api/cljs-repl "dev")
     (figwheel.main.api/start "dev")))
+
+(comment
+  (start)
+  (cljs)
+  (stop)
+  (reset)
+  )

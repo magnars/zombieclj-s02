@@ -1,5 +1,7 @@
 (ns zombies.system
-  (:require [clojure.edn :as edn]
+  (:require [chord.http-kit :refer [with-channel]]
+            [clojure.core.async :refer [put!]]
+            [clojure.edn :as edn]
             [clojure.java.io :as io]
             [compojure.core :refer [GET routes]]
             [compojure.route :as route]
@@ -15,8 +17,13 @@
 (defmethod ig/init-key :app/config [_ _]
   (edn/read-string (slurp (io/resource "config.edn"))))
 
+(defn ws-handler [req]
+  (with-channel req ws-channel
+    (put! ws-channel "Hello")))
+
 (defmethod ig/init-key :app/handler [_ _]
   (routes
+   (GET "/ws" [] ws-handler)
    (GET "/" [] (io/resource "public/index.html"))
    (route/resources "/")))
 
