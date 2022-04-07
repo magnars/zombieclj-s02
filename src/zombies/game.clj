@@ -11,15 +11,15 @@
 (defn kickstart-game [seed]
   (let [rng (java.util.Random. seed)]
     [[:add-zombie {:id :zombie-1 :kind 1 :max-health 5}]
-     [:show-tips {:id :zombies-intro
-                  :position :at-zombies
-                  :header "Zombiene kommer!"
-                  :prose "Det er zombier overalt. En av dem har oppdaget deg. Du har også sett tre andre i nærheten."}]
+     [:show-tip {:id :zombies-intro
+                 :position :at-zombies
+                 :header "Zombiene kommer!"
+                 :prose "Det er zombier overalt. En av dem har oppdaget deg. Du har også sett tre andre i nærheten."}]
      [:set-player-health 9]
-     [:show-tips {:id :player-health-intro
-                  :position :at-player-health
-                  :header "Dine helsepoeng"
-                  :prose "Disse små hjertene er alt som står mellom deg og de vandøde."}]
+     [:show-tip {:id :player-health-intro
+                 :position :at-player-health
+                 :header "Dine helsepoeng"
+                 :prose "Disse små hjertene er alt som står mellom deg og de vandøde."}]
      [:add-dice (for [i (range 5)]
                   {:id (keyword (str "die-" i))
                    :current-face (nth faces (mod (.nextInt rng) (count faces)))
@@ -37,5 +37,5 @@
     [:add-zombie zombie] (assoc-in game [:zombies (:id zombie)] zombie)
     [:set-player-health n] (assoc-in game [:player :max-health] n)
     [:set-player-rerolls n] (assoc-in game [:player :rerolls] n)
-    [:show-tips tips] game
+    [:show-tip tip] game
     [:use-reroll n] (assoc-in game [:player :used-rerolls] n)))

@@ -9,12 +9,12 @@
      (for [_ (range max-health)]
        [:div.heart])]]])
 
-(defcomponent Tips [{:keys [position header prose action]}]
-  [:div.tips {:onClick #(when action (bus/publish action))}
-   [:div.tips-box {:className (name position)}
-    [:div.tips-arrow]
-    [:div.tips-header header]
-    [:div.tips-prose prose]]])
+(defcomponent Tip [{:keys [position header prose action]}]
+  [:div.tip {:onClick #(when action (bus/publish action))}
+   [:div.tip-box {:className (name position)}
+    [:div.tip-arrow]
+    [:div.tip-header header]
+    [:div.tip-prose prose]]])
 
 (defcomponent Player [{:keys [max-health]}]
   [:div
@@ -39,7 +39,7 @@
      (for [i (range num)]
        [:div.reroll {:className (when (< i used) "used")}]))])
 
-(defcomponent Page [{:keys [zombies tips player dice server-error]}]
+(defcomponent Page [{:keys [zombies tip player dice server-error]}]
   (if server-error
     [:h1 server-error]
     [:div.page
@@ -54,4 +54,4 @@
        (->> (map Die (vals dice))
             (interpose [:div.dice-spacing]))
        (Rerolls player)]]
-     (when tips (Tips tips))]))
+     (when tip (Tip tip))]))

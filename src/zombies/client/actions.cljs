@@ -11,13 +11,13 @@
         (match action
           [:assoc-in path v] (do (swap! store assoc-in path v)
                                  (recur next-actions))
-          [:show-tips tips] (let [id (some-> (:id tips) name)]
-                              (if (and id (js/localStorage.getItem id))
-                                (recur next-actions)
-                                (do
-                                  (swap! store assoc-in [:tips]
-                                         (assoc tips :action [:perform-actions (into [[:assoc-in [:tips] nil]]
-                                                                                     next-actions)]))
-                                  (when id (js/localStorage.setItem id "seen")))))
+          [:show-tip tip] (let [id (some-> (:id tip) name)]
+                            (if (and id (js/localStorage.getItem id))
+                              (recur next-actions)
+                              (do
+                                (swap! store assoc-in [:tip]
+                                       (assoc tip :action [:perform-actions (into [[:assoc-in [:tip] nil]]
+                                                                                  next-actions)]))
+                                (when id (js/localStorage.setItem id "seen")))))
           [:wait ms] (do (<! (timeout ms))
                          (recur next-actions)))))))

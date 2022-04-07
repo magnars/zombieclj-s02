@@ -1414,7 +1414,7 @@ body {background: #ddf; margin: 0;}
     animation-timing-function: cubic-bezier(0.215, 0.610, 0.150, 1.170);
 }
 
-.tips {
+.tip {
     cursor: pointer;
     position: absolute;
     top: 0;
@@ -1434,7 +1434,7 @@ body {background: #ddf; margin: 0;}
     to {transform: translate(0, 0)}
 }
 
-.tips-box {
+.tip-box {
     position: absolute;
     font-family: Helvetica;
     font-size: 18px;
@@ -1453,7 +1453,7 @@ body {background: #ddf; margin: 0;}
     animation-delay: 300ms;
 }
 
-.tips-arrow {
+.tip-arrow {
     width: 60px;
     height: 31px;
     background: url(img/tips-arrow.png);
@@ -1463,7 +1463,7 @@ body {background: #ddf; margin: 0;}
     margin-left: -30px;
     top: -30px;
 }
-.tips-header {font-weight: bold; margin-bottom: 10px; font-size: 23px;}
+.tip-header {font-weight: bold; margin-bottom: 10px; font-size: 23px;}
 
 
 .at-intentions { top: 120px; }
@@ -1473,15 +1473,15 @@ body {background: #ddf; margin: 0;}
 .at-player-health { top: 490px; }
 .at-clamps { top: 705px; }
 .at-rerolls { top: 620px; }
-.at-rerolls .tips-arrow { margin-left: 495px; }
+.at-rerolls .tip-arrow { margin-left: 495px; }
 
 .at-status-bar { bottom: 100px; }
 .at-junkyard { bottom: 180px; }
 .at-active-items {bottom: 145px;}
 
-.at-active-items .tips-arrow,
-.at-junkyard .tips-arrow,
-.at-status-bar .tips-arrow {
+.at-active-items .tip-arrow,
+.at-junkyard .tip-arrow,
+.at-status-bar .tip-arrow {
     top: inherit;
     bottom: -30px;
     transform: rotate(180deg);
@@ -1490,6 +1490,6 @@ body {background: #ddf; margin: 0;}
     margin-left: 0;
 }
 
-.at-status-bar .tips-arrow {left: 180px;}
-.at-junkyard .tips-arrow {left: 50%;}
-.at-active-items .tips-arrow {left: 5px;}
+.at-status-bar .tip-arrow {left: 180px;}
+.at-junkyard .tip-arrow {left: 50%;}
+.at-active-items .tip-arrow {left: 5px;}

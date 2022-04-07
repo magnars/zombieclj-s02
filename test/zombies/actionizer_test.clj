@@ -8,13 +8,13 @@
                                            :kind 1
                                            :max-health 5}]])))
 
-(deftest show-tips
-  (is (= (sut/event->actions [:show-tips {:position :at-zombies
-                                          :header "Zombiene kommer!"
-                                          :prose "Det er zombier overalt."}])
-         [[:show-tips {:position :at-zombies
-                       :header "Zombiene kommer!"
-                       :prose "Det er zombier overalt."}]])))
+(deftest show-tip
+  (is (= (sut/event->actions [:show-tip {:position :at-zombies
+                                         :header "Zombiene kommer!"
+                                         :prose "Det er zombier overalt."}])
+         [[:show-tip {:position :at-zombies
+                      :header "Zombiene kommer!"
+                      :prose "Det er zombier overalt."}]])))
 
 (deftest set-player-health
   (is (= (sut/event->actions [:set-player-health 9])

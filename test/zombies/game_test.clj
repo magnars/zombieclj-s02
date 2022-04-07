@@ -5,15 +5,15 @@
 (deftest kickstart-game
   (is (= (sut/kickstart-game 0)
          [[:add-zombie {:id :zombie-1 :kind 1 :max-health 5}]
-          [:show-tips {:id :zombies-intro
-                       :position :at-zombies
-                       :header "Zombiene kommer!"
-                       :prose "Det er zombier overalt. En av dem har oppdaget deg. Du har også sett tre andre i nærheten."}]
+          [:show-tip {:id :zombies-intro
+                      :position :at-zombies
+                      :header "Zombiene kommer!"
+                      :prose "Det er zombier overalt. En av dem har oppdaget deg. Du har også sett tre andre i nærheten."}]
           [:set-player-health 9]
-          [:show-tips {:id :player-health-intro
-                       :position :at-player-health
-                       :header "Dine helsepoeng"
-                       :prose "Disse små hjertene er alt som står mellom deg og de vandøde."}]
+          [:show-tip {:id :player-health-intro
+                      :position :at-player-health
+                      :header "Dine helsepoeng"
+                      :prose "Disse små hjertene er alt som står mellom deg og de vandøde."}]
           [:add-dice [{:id :die-0
                        :current-face :shields
                        :faces [:punch :heal :shields :punches :shovel :skull]}
@@ -35,7 +35,7 @@
   (is (= (sut/update-game {} [:add-zombie {:id :zombie-1 :kind 1 :max-health 5}])
          {:zombies {:zombie-1 {:id :zombie-1 :kind 1 :max-health 5}}}))
 
-  (is (= (sut/update-game {} [:show-tips {:id :zombies-intro}])
+  (is (= (sut/update-game {} [:show-tip {:id :zombies-intro}])
          {}))
 
   (is (= (sut/update-game {} [:set-player-health 9])
