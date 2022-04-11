@@ -31,7 +31,9 @@
 (add-watch store ::me render)
 
 (defonce only-once
-  (connect-to-ws))
+  (do
+    (dumdom/set-event-handler! (fn [_ action] (bus/publish action)))
+    (connect-to-ws)))
 
 (defn reset []
   (close! @ws-atom)
