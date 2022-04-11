@@ -15,19 +15,19 @@
                       :header "Dine helsepoeng"
                       :prose "Disse små hjertene er alt som står mellom deg og de vandøde."}]
           [:add-dice [{:id :die-0
-                       :current-face :shields
+                       :current-face 2
                        :faces [:punch :heal :shields :punches :shovel :skull]}
                       {:id :die-1
-                       :current-face :shovel
+                       :current-face 4
                        :faces [:punch :heal :shields :punches :shovel :skull]}
                       {:id :die-2
-                       :current-face :shields
+                       :current-face 2
                        :faces [:punch :heal :shields :punches :shovel :skull]}
                       {:id :die-3
-                       :current-face :punch
+                       :current-face 0
                        :faces [:punch :heal :shields :punches :shovel :skull]}
                       {:id :die-4
-                       :current-face :punch
+                       :current-face 0
                        :faces [:punch :heal :shields :punches :shovel :skull]}]]
           [:set-player-rerolls 2]
           [:set-seed 1]])))
@@ -80,17 +80,17 @@
          {:seed 1}))
 
   (is (= (sut/update-game {:dice {:die-0 {:id :die-0
-                                          :current-face :shields
+                                          :current-face 1
                                           :faces [:punch :heal :shields :punches :shovel :skull]}
                                   :die-1 {:id :die-1
-                                          :current-face :shovel
+                                          :current-face 3
                                           :faces [:punch :heal :shields :punches :shovel :skull]}}}
-                          [:reroll-die {:id :die-0 :from :shields :to :punches}])
+                          [:reroll-die {:id :die-0 :from 0 :to 2}])
          {:dice {:die-0 {:id :die-0
-                         :current-face :punches
+                         :current-face 2
                          :faces [:punch :heal :shields :punches :shovel :skull]}
                  :die-1 {:id :die-1
-                         :current-face :shovel
+                         :current-face 3
                          :faces [:punch :heal :shields :punches :shovel :skull]}}})))
 
 (deftest reroll
@@ -115,12 +115,12 @@
   (is (= (sut/reroll {:seed 1
                       :player {:rerolls 2}
                       :dice {:die-0 {:id :die-0
-                                     :current-face :shields
+                                     :current-face 1
                                      :faces [:punch :heal :shields :punches :shovel :skull]}
                              :die-1 {:id :die-1
-                                     :current-face :shovel
+                                     :current-face 3
                                      :faces [:punch :heal :shields :punches :shovel :skull]}}})
          [[:use-reroll 1]
-          [:reroll-die {:id :die-0 :from :shields :to :punches}]
-          [:reroll-die {:id :die-1 :from :shovel :to :shields}]
+          [:reroll-die {:id :die-0 :from 1 :to 3 :roll-id 1}]
+          [:reroll-die {:id :die-1 :from 3 :to 2 :roll-id 1}]
           [:set-seed 2]])))

@@ -21,11 +21,16 @@
     (for [_ (range max-health)]
       [:div.heart])]])
 
-(defcomponent Die [{:keys [id current-face faces entering?]}]
+(defcomponent Die [{:keys [id roll-id current-face previous-face faces]}]
   [:div.die-w-lock
-   [:div.die {:class (str (name id)
-                              (when entering? " entering"))}
-    [:div.cube {:class (str "facing-" (.indexOf faces current-face))}
+   [:div.die {:key (str id roll-id)
+              :class (str (name id)
+                          (if previous-face
+                            " rolling"
+                            " entering"))}
+    [:div.cube {:class (if previous-face
+                         (str "roll-" previous-face "-to-" current-face)
+                         (str "entering-" current-face))}
      (map (fn [face i]
             [:div.face {:class (str "face-" i " " (name face))}])
           faces

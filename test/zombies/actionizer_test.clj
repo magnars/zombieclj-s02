@@ -26,18 +26,16 @@
 
 (deftest add-die
   (is (= (sut/event->actions [:add-dice [{:id :die-0
-                                          :current-face :shields
+                                          :current-face 2
                                           :faces [:punch :heal :shields :punches :shovel :skull]}
                                          {:id :die-1
-                                          :current-face :punch
+                                          :current-face 0
                                           :faces [:punch :heal :shields :punches :shovel :skull]}]])
          [[:assoc-in [:dice :die-0] {:id :die-0
-                                     :entering? true
-                                     :current-face :shields
+                                     :current-face 2
                                      :faces [:punch :heal :shields :punches :shovel :skull]}]
           [:assoc-in [:dice :die-1] {:id :die-1
-                                     :entering? true
-                                     :current-face :punch
+                                     :current-face 0
                                      :faces [:punch :heal :shields :punches :shovel :skull]}]
           [:wait 2000]])))
 
@@ -46,6 +44,7 @@
          [[:assoc-in [:player :used-rerolls] 1]])))
 
 (deftest reroll-die
-  (is (= (sut/event->actions [:reroll-die {:id :die-0, :from :shields, :to :shovel}])
-         [[:assoc-in [:dice :die-0 :current-face] :shovel]
-          [:assoc-in [:dice :die-0 :previous-face] :shields]])))
+  (is (= (sut/event->actions [:reroll-die {:id :die-0, :roll-id 1, :from 2, :to 0}])
+         [[:assoc-in [:dice :die-0 :roll-id] 1]
+          [:assoc-in [:dice :die-0 :current-face] 0]
+          [:assoc-in [:dice :die-0 :previous-face] 2]])))

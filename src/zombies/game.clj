@@ -22,7 +22,7 @@
                  :prose "Disse små hjertene er alt som står mellom deg og de vandøde."}]
      [:add-dice (for [i (range 5)]
                   {:id (keyword (str "die-" i))
-                   :current-face (nth faces (mod (.nextInt rng) (count faces)))
+                   :current-face (mod (.nextInt rng) (count faces))
                    :faces faces})]
      [:set-player-rerolls 2]
      [:set-seed (inc seed)]]))
@@ -36,7 +36,8 @@
        (for [die (vals dice)]
          [:reroll-die {:id (:id die)
                        :from (:current-face die)
-                       :to (nth (:faces die) (mod (.nextInt rng) (count (:faces die))))}])
+                       :to (mod (.nextInt rng) (count (:faces die)))
+                       :roll-id seed}])
        [[:set-seed (inc seed)]]))))
 
 (defn update-game [game event]
