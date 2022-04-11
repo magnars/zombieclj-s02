@@ -172,3 +172,28 @@
                                            :faces [:punch :heal :shields :punches :shovel :skull]}}}
                            :die-1)
          [[:set-die-lock :die-1 false]])))
+
+(deftest execute-turn
+  (is (= (sut/use-dice {:zombies {:zombie-1 {:max-health 5}}}
+                       {:target :zombie-1})
+         []))
+
+  (is (= (sut/use-dice {:zombies {:zombie-1 {:max-health 5}}
+                        :dice {:die-0 {:current-face 0
+                                       :faces [:punch :heal :shields :punches :shovel :skull]}}}
+                       {:target :zombie-1})
+         [[:punch-zombie :zombie-1 1]]))
+
+  (is (= (sut/use-dice {:zombies {:zombie-1 {:max-health 5}}
+                        :dice {:die-0 {:current-face 5
+                                       :faces [:punch :heal :shields :punches :shovel :skull]}}}
+                       {:target :zombie-1})
+         []))
+
+  (is (= (sut/use-dice {:zombies {:zombie-1 {:max-health 5}}
+                        :dice {:die-0 {:current-face 3
+                                       :faces [:punch :heal :shields :punches :shovel :skull]}
+                               :die-1 {:current-face 0
+                                       :faces [:punch :heal :shields :punches :shovel :skull]}}}
+                       {:target :zombie-1})
+         [[:punch-zombie :zombie-1 3]])))

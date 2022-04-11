@@ -21,10 +21,9 @@
     (go
       (loop [game (update-game initial-game initial-events)]
         (when-let [command (:message (<! ws-channel))]
-          (match command
-            [:reroll] (let [events (game/reroll game)]
-                        (put! ws-channel (actionize events))
-                        (recur (update-game game events)))
-            [:toggle-clamp id] (let [events (game/toggle-clamp game id)]
-                                 (put! ws-channel (actionize events))
-                                 (recur (update-game game events)))))))))
+          (let [events (match command
+                         [:reroll] (game/reroll game)
+                         [:toggle-clamp id] (game/toggle-clamp game id)
+                         [:use-dice opts] (game/use-dice game opts))]
+            (put! ws-channel (actionize events))
+            (recur (update-game game events))))))))

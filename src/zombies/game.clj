@@ -43,6 +43,19 @@
 (defn toggle-clamp [game die-id]
   [[:set-die-lock die-id (not (get-in game [:dice die-id :locked?]))]])
 
+(defn face? [die face]
+  (= face (nth (:faces die) (:current-face die))))
+
+(defn use-dice [game {:keys [target]}]
+  (let [punches (apply + (map #(cond
+                                 (face? % :punch) 1
+                                 (face? % :punches) 2
+                                 :else 0)
+                              (vals (:dice game))))]
+    (if (< 0 punches)
+      [[:punch-zombie target punches]]
+      [])))
+
 (defn update-game [game event]
   (match event
     [:add-dice dice] (update game :dice merge (into {} (map (juxt :id identity) dice)))

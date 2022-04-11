@@ -3,7 +3,8 @@
 
 (defcomponent Zombie [{:keys [id kind max-health]}]
   [:div.zombie-position
-   [:div.zombie {:class (str "zombie-" kind)}
+   [:div.zombie {:class (str "zombie-" kind)
+                 :on-click [:send-command [:use-dice {:target id}]]}
     [:div.zombie-health
      (for [_ (range max-health)]
        [:div.heart])]]])
