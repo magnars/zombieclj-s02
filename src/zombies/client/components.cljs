@@ -23,13 +23,15 @@
     (for [_ (range max-health)]
       [:div.heart])]])
 
-(defcomponent Die [{:keys [id roll-id current-face previous-face faces locked?]}]
+(defcomponent Die [{:keys [id roll-id current-face previous-face faces locked? status]}]
   [:div.die-w-lock
    [:div.die {:key (str id roll-id)
               :class (str (name id)
-                          (if previous-face
-                            " rolling"
-                            " entering"))}
+                          (cond
+                            (= :used status) " used"
+                            (= :using status) " using"
+                            previous-face " rolling"
+                            :else " entering"))}
     [:div.cube {:class (if previous-face
                          (str "roll-" previous-face "-to-" current-face)
                          (str "entering-" current-face))}

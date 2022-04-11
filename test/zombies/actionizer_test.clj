@@ -53,8 +53,13 @@
   (is (= (sut/event->actions [:set-die-lock :die-0 true])
          [[:assoc-in [:dice :die-0 :locked?] true]])))
 
-#_(deftest punch-zombie
+(deftest punch-zombie
   (is (= (sut/event->actions [:punch-zombie {:target :zombie-1
-                                             :die-ids #{:die-3 :die-5}
+                                             :die-ids [:die-3 :die-5]
                                              :punches 3
-                                             :health 5}]))))
+                                             :health 5}])
+         [[:assoc-in [:dice :die-3 :status] :using]
+          [:assoc-in [:dice :die-5 :status] :using]
+          [:wait 1500]
+          [:assoc-in [:dice :die-3 :status] :used]
+          [:assoc-in [:dice :die-5 :status] :used]])))

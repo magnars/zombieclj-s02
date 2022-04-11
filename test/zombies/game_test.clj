@@ -32,16 +32,19 @@
           [:set-player-rerolls 2]
           [:set-seed 1]])))
 
-(deftest update-game
+(deftest add-zombie
   (is (= (sut/update-game {} [:add-zombie {:id :zombie-1 :kind 1 :max-health 5}])
-         {:zombies {:zombie-1 {:id :zombie-1 :kind 1 :max-health 5}}}))
+         {:zombies {:zombie-1 {:id :zombie-1 :kind 1 :max-health 5}}})))
 
+(deftest show-tip
   (is (= (sut/update-game {} [:show-tip {:id :zombies-intro}])
-         {}))
+         {})))
 
+(deftest set-player-health
   (is (= (sut/update-game {} [:set-player-health 9])
-         {:player {:max-health 9}}))
+         {:player {:max-health 9}})))
 
+(deftest add-dice
   (is (= (sut/update-game {} [:add-dice [{:id :die-0
                                           :current-face :shields
                                           :faces [:punch :heal :shields :punches :shovel :skull]}
@@ -53,8 +56,9 @@
                          :faces [:punch :heal :shields :punches :shovel :skull]}
                  :die-1 {:id :die-1
                          :current-face :shovel
-                         :faces [:punch :heal :shields :punches :shovel :skull]}}}))
+                         :faces [:punch :heal :shields :punches :shovel :skull]}}})))
 
+(deftest add-multiple-dice
   (is (= (-> {}
              (sut/update-game [:add-dice [{:id :die-0
                                            :current-face :shields
@@ -67,18 +71,22 @@
                          :faces [:punch :heal :shields :punches :shovel :skull]}
                  :die-1 {:id :die-1
                          :current-face :shovel
-                         :faces [:punch :heal :shields :punches :shovel :skull]}}}))
+                         :faces [:punch :heal :shields :punches :shovel :skull]}}})))
 
+(deftest set-player-rerolls
   (is (= (sut/update-game {} [:set-player-rerolls 2])
-         {:player {:rerolls 2}}))
+         {:player {:rerolls 2}})))
 
+(deftest use-reroll
   (is (= (sut/update-game {:player {:rerolls 2}} [:use-reroll 1])
          {:player {:rerolls 2
-                   :used-rerolls 1}}))
+                   :used-rerolls 1}})))
 
+(deftest set-seed
   (is (= (sut/update-game {} [:set-seed 1])
-         {:seed 1}))
+         {:seed 1})))
 
+(deftest reroll-die
   (is (= (sut/update-game {:dice {:die-0 {:id :die-0
                                           :current-face 1
                                           :faces [:punch :heal :shields :punches :shovel :skull]}
@@ -91,8 +99,9 @@
                          :faces [:punch :heal :shields :punches :shovel :skull]}
                  :die-1 {:id :die-1
                          :current-face 3
-                         :faces [:punch :heal :shields :punches :shovel :skull]}}}))
+                         :faces [:punch :heal :shields :punches :shovel :skull]}}})))
 
+(deftest set-die-lock
   (is (= (sut/update-game {:dice {:die-0 {:id :die-0
                                           :current-face 1
                                           :faces [:punch :heal :shields :punches :shovel :skull]}
@@ -106,8 +115,9 @@
                  :die-1 {:id :die-1
                          :current-face 3
                          :locked? true
-                         :faces [:punch :heal :shields :punches :shovel :skull]}}}))
+                         :faces [:punch :heal :shields :punches :shovel :skull]}}})))
 
+(deftest punch-zombie
   (is (= (sut/update-game {:zombies {:zombie-1 {:id :zombie-1 :kind 1 :max-health 5}}}
                           [:punch-zombie :zombie-1 3])
          {:zombies {:zombie-1 {:id :zombie-1
@@ -194,27 +204,37 @@
                            :die-1)
          [[:set-die-lock :die-1 false]])))
 
-(deftest execute-turn
-  (is (= (sut/use-dice {:zombies {:zombie-1 {:max-health 5}}}
+(deftest execute-turn--punch-zombie
+  (is (= (sut/use-dice {:zombies {:zombie-1 {:health 5}}}
                        {:target :zombie-1})
          []))
 
-  (is (= (sut/use-dice {:zombies {:zombie-1 {:max-health 5}}
-                        :dice {:die-0 {:current-face 0
+  (is (= (sut/use-dice {:zombies {:zombie-1 {:health 5}}
+                        :dice {:die-0 {:id :die-0
+                                       :current-face 0
                                        :faces [:punch :heal :shields :punches :shovel :skull]}}}
                        {:target :zombie-1})
-         [[:punch-zombie :zombie-1 1]]))
+         [[:punch-zombie {:target :zombie-1
+                          :die-ids [:die-0]
+                          :punches 1
+                          :health 5}]]))
 
-  (is (= (sut/use-dice {:zombies {:zombie-1 {:max-health 5}}
-                        :dice {:die-0 {:current-face 5
+  (is (= (sut/use-dice {:zombies {:zombie-1 {:health 5}}
+                        :dice {:die-0 {:id :die-0
+                                       :current-face 5
                                        :faces [:punch :heal :shields :punches :shovel :skull]}}}
                        {:target :zombie-1})
          []))
 
-  (is (= (sut/use-dice {:zombies {:zombie-1 {:max-health 5}}
-                        :dice {:die-0 {:current-face 3
+  (is (= (sut/use-dice {:zombies {:zombie-1 {:health 5}}
+                        :dice {:die-0 {:id :die-0
+                                       :current-face 3
                                        :faces [:punch :heal :shields :punches :shovel :skull]}
-                               :die-1 {:current-face 0
+                               :die-1 {:id :die-1
+                                       :current-face 0
                                        :faces [:punch :heal :shields :punches :shovel :skull]}}}
                        {:target :zombie-1})
-         [[:punch-zombie :zombie-1 3]])))
+         [[:punch-zombie {:target :zombie-1
+                          :die-ids [:die-0 :die-1]
+                          :punches 3
+                          :health 5}]])))

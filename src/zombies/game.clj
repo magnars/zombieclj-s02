@@ -46,14 +46,23 @@
 (defn face? [die face]
   (= face (nth (:faces die) (:current-face die))))
 
+(defn punch? [die]
+  (or (face? die :punch)
+      (face? die :punches)))
+
+(defn punch-value [die]
+  (cond
+    (face? die :punch) 1
+    (face? die :punches) 2
+    :else 0))
+
 (defn use-dice [game {:keys [target]}]
-  (let [punches (apply + (map #(cond
-                                 (face? % :punch) 1
-                                 (face? % :punches) 2
-                                 :else 0)
-                              (vals (:dice game))))]
-    (if (< 0 punches)
-      [[:punch-zombie target punches]]
+  (let [punch-dice (filter punch? (vals (:dice game)))]
+    (if (seq punch-dice)
+      [[:punch-zombie {:target target
+                       :die-ids (map :id punch-dice)
+                       :punches (apply + (map punch-value punch-dice))
+                       :health (get-in game [:zombies target :health])}]]
       [])))
 
 (defn punch-zombie [game id punches]
