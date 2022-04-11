@@ -55,11 +55,38 @@
 
 (deftest punch-zombie
   (is (= (sut/event->actions [:punch-zombie {:target :zombie-1
-                                             :die-ids [:die-3 :die-5]
-                                             :punches 3
+                                             :die-ids [:die-3]
+                                             :punches 1
                                              :health 5}])
          [[:assoc-in [:dice :die-3 :status] :using]
-          [:assoc-in [:dice :die-5 :status] :using]
-          [:wait 1500]
-          [:assoc-in [:dice :die-3 :status] :used]
-          [:assoc-in [:dice :die-5 :status] :used]])))
+          [:assoc-in [:zombies :zombie-1 :punches] ["punched-1"]]
+          [:assoc-in [:zombies :zombie-1 :health] 4]
+          [:wait 200]
+          [:assoc-in [:dice :die-3 :status] :used]]))
+
+  (is (= (sut/event->actions [:punch-zombie {:target :zombie-1
+                                             :die-ids [:die-3]
+                                             :punches 2
+                                             :health 5}])
+         [[:assoc-in [:dice :die-3 :status] :using]
+          [:assoc-in [:zombies :zombie-1 :punches] ["punched-1"]]
+          [:assoc-in [:zombies :zombie-1 :health] 4]
+          [:wait 200]
+          [:assoc-in [:zombies :zombie-1 :punches] ["punched-4"]]
+          [:assoc-in [:zombies :zombie-1 :health] 3]
+          [:wait 200]
+          [:assoc-in [:dice :die-3 :status] :used]]))
+
+  (is (= (sut/event->actions [:punch-zombie {:target :zombie-1
+                                             :die-ids [:die-3]
+                                             :punches 2
+                                             :health 2}])
+         [[:assoc-in [:dice :die-3 :status] :using]
+          [:assoc-in [:zombies :zombie-1 :punches] ["punched-1"]]
+          [:assoc-in [:zombies :zombie-1 :health] 1]
+          [:wait 200]
+          [:assoc-in [:zombies :zombie-1 :punches] ["punched-4"]]
+          [:assoc-in [:zombies :zombie-1 :health] 0]
+          [:wait 200]
+          [:assoc-in [:zombies :zombie-1 :falling?] true]
+          [:assoc-in [:dice :die-3 :status] :used]])))

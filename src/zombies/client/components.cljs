@@ -1,14 +1,23 @@
 (ns zombies.client.components
-  (:require [dumdom.core :refer [defcomponent]]))
+  (:require [clojure.string :as str]
+            [dumdom.core :refer [defcomponent]]))
 
-(defcomponent Zombie [{:keys [id kind max-health health]}]
+(defcomponent Zombie [{:keys [id kind max-health health punches falling?]}]
   [:div.zombie-position
-   [:div.zombie {:class (str "zombie-" kind)
+   [:div.zombie {:class (str "zombie-" kind
+                             (when falling? " falling")
+                             " " (str/join " " punches))
                  :on-click [:send-command [:use-dice {:target id}]]}
     [:div.zombie-health
      (for [i (range max-health)]
        [:div.heart (when (<= health i)
-                     {:class "lost"})])]]])
+                     {:class "lost"})])]
+    [:div.zombie-punches
+     [:div.zombie-punch-1]
+     [:div.zombie-punch-2]
+     [:div.zombie-punch-3]
+     [:div.zombie-punch-4]
+     [:div.zombie-punch-5]]]])
 
 (defcomponent Tip [{:keys [position header prose action]}]
   [:div.tip {:on-click action}

@@ -1,11 +1,27 @@
 (ns zombies.actionizer
   (:require [clojure.core.match :refer [match]]))
 
+(def punch-names
+  (cycle ["punched-1"
+          "punched-4"
+          "punched-2"
+          "punched-5"
+          "punched-3"]))
+
 (defn punch-zombie [{:keys [target die-ids punches health]}]
   (concat
    (for [id die-ids]
      [:assoc-in [:dice id :status] :using])
-   [[:wait 1500]]
+   (mapcat
+    (fn [i punch]
+      (cond->
+          [[:assoc-in [:zombies target :punches] [punch]]
+           [:assoc-in [:zombies target :health] (- health i 1)]
+           [:wait 200]]
+        (= 0 (- health i 1))
+        (conj [:assoc-in [:zombies target :falling?] true])))
+    (range)
+    (take punches punch-names))
    (for [id die-ids]
      [:assoc-in [:dice id :status] :used])))
 
