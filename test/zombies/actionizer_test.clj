@@ -44,3 +44,8 @@
 (deftest use-reroll
   (is (= (sut/event->actions [:use-reroll 1])
          [[:assoc-in [:player :used-rerolls] 1]])))
+
+(deftest reroll-die
+  (is (= (sut/event->actions [:reroll-die {:id :die-0, :from :shields, :to :shovel}])
+         [[:assoc-in [:dice :die-0 :current-face] :shovel]
+          [:assoc-in [:dice :die-0 :previous-face] :shields]])))

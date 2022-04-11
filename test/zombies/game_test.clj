@@ -29,7 +29,8 @@
                       {:id :die-4
                        :current-face :punch
                        :faces [:punch :heal :shields :punches :shovel :skull]}]]
-          [:set-player-rerolls 2]])))
+          [:set-player-rerolls 2]
+          [:set-seed 1]])))
 
 (deftest update-game
   (is (= (sut/update-game {} [:add-zombie {:id :zombie-1 :kind 1 :max-health 5}])
@@ -73,17 +74,53 @@
 
   (is (= (sut/update-game {:player {:rerolls 2}} [:use-reroll 1])
          {:player {:rerolls 2
-                   :used-rerolls 1}})))
+                   :used-rerolls 1}}))
+
+  (is (= (sut/update-game {} [:set-seed 1])
+         {:seed 1}))
+
+  (is (= (sut/update-game {:dice {:die-0 {:id :die-0
+                                          :current-face :shields
+                                          :faces [:punch :heal :shields :punches :shovel :skull]}
+                                  :die-1 {:id :die-1
+                                          :current-face :shovel
+                                          :faces [:punch :heal :shields :punches :shovel :skull]}}}
+                          [:reroll-die {:id :die-0 :from :shields :to :punches}])
+         {:dice {:die-0 {:id :die-0
+                         :current-face :punches
+                         :faces [:punch :heal :shields :punches :shovel :skull]}
+                 :die-1 {:id :die-1
+                         :current-face :shovel
+                         :faces [:punch :heal :shields :punches :shovel :skull]}}})))
 
 (deftest reroll
-  (is (= (sut/reroll {:player {}})
+  (is (= (sut/reroll {:player {}
+                      :seed 0})
          nil))
 
-  (is (= (sut/reroll {:player {:rerolls 2}})
-         [[:use-reroll 1]]))
+  (is (= (sut/reroll {:player {:rerolls 2}
+                      :seed 0})
+         [[:use-reroll 1]
+          [:set-seed 1]]))
 
-  (is (= (sut/reroll {:player {:rerolls 2 :used-rerolls 1}})
-         [[:use-reroll 2]]))
+  (is (= (sut/reroll {:player {:rerolls 2 :used-rerolls 1}
+                      :seed 0})
+         [[:use-reroll 2]
+          [:set-seed 1]]))
 
-  (is (= (sut/reroll {:player {:rerolls 2 :used-rerolls 2}})
-         nil)))
+  (is (= (sut/reroll {:player {:rerolls 2 :used-rerolls 2}
+                      :seed 0})
+         nil))
+
+  (is (= (sut/reroll {:seed 1
+                      :player {:rerolls 2}
+                      :dice {:die-0 {:id :die-0
+                                     :current-face :shields
+                                     :faces [:punch :heal :shields :punches :shovel :skull]}
+                             :die-1 {:id :die-1
+                                     :current-face :shovel
+                                     :faces [:punch :heal :shields :punches :shovel :skull]}}})
+         [[:use-reroll 1]
+          [:reroll-die {:id :die-0 :from :shields :to :punches}]
+          [:reroll-die {:id :die-1 :from :shovel :to :shields}]
+          [:set-seed 2]])))
