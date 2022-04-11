@@ -1,13 +1,14 @@
 (ns zombies.client.components
   (:require [dumdom.core :refer [defcomponent]]))
 
-(defcomponent Zombie [{:keys [id kind max-health]}]
+(defcomponent Zombie [{:keys [id kind max-health health]}]
   [:div.zombie-position
    [:div.zombie {:class (str "zombie-" kind)
                  :on-click [:send-command [:use-dice {:target id}]]}
     [:div.zombie-health
-     (for [_ (range max-health)]
-       [:div.heart])]]])
+     (for [i (range max-health)]
+       [:div.heart (when (<= health i)
+                     {:class "lost"})])]]])
 
 (defcomponent Tip [{:keys [position header prose action]}]
   [:div.tip {:on-click action}

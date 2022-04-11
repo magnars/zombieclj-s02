@@ -52,3 +52,9 @@
 (deftest toggle-clamp
   (is (= (sut/event->actions [:set-die-lock :die-0 true])
          [[:assoc-in [:dice :die-0 :locked?] true]])))
+
+#_(deftest punch-zombie
+  (is (= (sut/event->actions [:punch-zombie {:target :zombie-1
+                                             :die-ids #{:die-3 :die-5}
+                                             :punches 3
+                                             :health 5}]))))

@@ -4,7 +4,7 @@
 
 (deftest kickstart-game
   (is (= (sut/kickstart-game 0)
-         [[:add-zombie {:id :zombie-1 :kind 1 :max-health 5}]
+         [[:add-zombie {:id :zombie-1 :kind 1 :max-health 5 :health 3}]
           [:show-tip {:id :zombies-intro
                       :position :at-zombies
                       :header "Zombiene kommer!"
@@ -106,7 +106,28 @@
                  :die-1 {:id :die-1
                          :current-face 3
                          :locked? true
-                         :faces [:punch :heal :shields :punches :shovel :skull]}}})))
+                         :faces [:punch :heal :shields :punches :shovel :skull]}}}))
+
+  (is (= (sut/update-game {:zombies {:zombie-1 {:id :zombie-1 :kind 1 :max-health 5}}}
+                          [:punch-zombie :zombie-1 3])
+         {:zombies {:zombie-1 {:id :zombie-1
+                               :kind 1
+                               :max-health 5
+                               :damage 3}}}))
+
+  (is (= (sut/update-game {:zombies {:zombie-1 {:id :zombie-1 :kind 1 :max-health 5 :damage 3}}}
+                          [:punch-zombie :zombie-1 1])
+         {:zombies {:zombie-1 {:id :zombie-1
+                               :kind 1
+                               :max-health 5
+                               :damage 4}}}))
+
+  (is (= (sut/update-game {:zombies {:zombie-1 {:id :zombie-1
+                                                :kind 1
+                                                :max-health 5
+                                                :damage 3}}}
+                          [:punch-zombie :zombie-1 2])
+         {:zombies {}})))
 
 (deftest reroll
   (is (= (sut/reroll {:player {}

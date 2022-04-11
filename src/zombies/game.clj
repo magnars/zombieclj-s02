@@ -10,7 +10,7 @@
 
 (defn kickstart-game [seed]
   (let [rng (java.util.Random. seed)]
-    [[:add-zombie {:id :zombie-1 :kind 1 :max-health 5}]
+    [[:add-zombie {:id :zombie-1 :kind 1 :max-health 5 :health 3}]
      [:show-tip {:id :zombies-intro
                  :position :at-zombies
                  :header "Zombiene kommer!"
@@ -56,10 +56,17 @@
       [[:punch-zombie target punches]]
       [])))
 
+(defn punch-zombie [game id punches]
+  (let [damage (+ punches (get-in game [:zombies (:id zombie) :damage] 0))]
+    (if (< damage (get-in game [:zombies (:id zombie) :max-health]))
+      (assoc-in game [:zombies (:id zombie) :damage] damage)
+      (update game :zombies dissoc id))))
+
 (defn update-game [game event]
   (match event
     [:add-dice dice] (update game :dice merge (into {} (map (juxt :id identity) dice)))
     [:add-zombie zombie] (assoc-in game [:zombies (:id zombie)] zombie)
+    [:punch-zombie id punches] (punch-zombie game id punches)
     [:reroll-die m] (assoc-in game [:dice (:id m) :current-face] (:to m))
     [:set-die-lock die-id b] (assoc-in game [:dice die-id :locked?] b)
     [:set-player-health n] (assoc-in game [:player :max-health] n)
