@@ -24,4 +24,7 @@
           (match command
             [:reroll] (let [events (game/reroll game)]
                         (put! ws-channel (actionize events))
-                        (recur (update-game game events)))))))))
+                        (recur (update-game game events)))
+            [:toggle-clamp id] (let [events (game/toggle-clamp game id)]
+                                 (put! ws-channel (actionize events))
+                                 (recur (update-game game events)))))))))

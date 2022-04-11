@@ -21,7 +21,7 @@
     (for [_ (range max-health)]
       [:div.heart])]])
 
-(defcomponent Die [{:keys [id roll-id current-face previous-face faces]}]
+(defcomponent Die [{:keys [id roll-id current-face previous-face faces locked?]}]
   [:div.die-w-lock
    [:div.die {:key (str id roll-id)
               :class (str (name id)
@@ -34,7 +34,11 @@
      (map (fn [face i]
             [:div.face {:class (str "face-" i " " (name face))}])
           faces
-          (range))]]])
+          (range))]]
+   [:div.clamp {:class (when locked? "locked")
+                :on-click [:send-command [:toggle-clamp id]]}
+    [:div.lock
+     [:div.padlock]]]])
 
 (defcomponent Rerolls [{:keys [rerolls used-rerolls]}]
   [:div.rerolls {:on-click [:send-command [:reroll]]}

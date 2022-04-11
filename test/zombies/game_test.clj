@@ -91,6 +91,21 @@
                          :faces [:punch :heal :shields :punches :shovel :skull]}
                  :die-1 {:id :die-1
                          :current-face 3
+                         :faces [:punch :heal :shields :punches :shovel :skull]}}}))
+
+  (is (= (sut/update-game {:dice {:die-0 {:id :die-0
+                                          :current-face 1
+                                          :faces [:punch :heal :shields :punches :shovel :skull]}
+                                  :die-1 {:id :die-1
+                                          :current-face 3
+                                          :faces [:punch :heal :shields :punches :shovel :skull]}}}
+                          [:set-die-lock :die-1 true])
+         {:dice {:die-0 {:id :die-0
+                         :current-face 1
+                         :faces [:punch :heal :shields :punches :shovel :skull]}
+                 :die-1 {:id :die-1
+                         :current-face 3
+                         :locked? true
                          :faces [:punch :heal :shields :punches :shovel :skull]}}})))
 
 (deftest reroll
@@ -123,4 +138,37 @@
          [[:use-reroll 1]
           [:reroll-die {:id :die-0 :from 1 :to 3 :roll-id 1}]
           [:reroll-die {:id :die-1 :from 3 :to 2 :roll-id 1}]
+          [:set-seed 2]]))
+
+  (is (= (sut/reroll {:seed 1
+                      :player {:rerolls 2}
+                      :dice {:die-0 {:id :die-0
+                                     :current-face 1
+                                     :locked? true
+                                     :faces [:punch :heal :shields :punches :shovel :skull]}
+                             :die-1 {:id :die-1
+                                     :current-face 3
+                                     :faces [:punch :heal :shields :punches :shovel :skull]}}})
+         [[:use-reroll 1]
+          [:reroll-die {:id :die-1 :from 3 :to 3 :roll-id 1}]
           [:set-seed 2]])))
+
+(deftest toggle-clamp
+  (is (= (sut/toggle-clamp {:dice {:die-0 {:id :die-0
+                                           :current-face 1
+                                           :faces [:punch :heal :shields :punches :shovel :skull]}
+                                   :die-1 {:id :die-1
+                                           :current-face 3
+                                           :faces [:punch :heal :shields :punches :shovel :skull]}}}
+                           :die-1)
+         [[:set-die-lock :die-1 true]]))
+
+  (is (= (sut/toggle-clamp {:dice {:die-0 {:id :die-0
+                                           :current-face 1
+                                           :faces [:punch :heal :shields :punches :shovel :skull]}
+                                   :die-1 {:id :die-1
+                                           :locked? true
+                                           :current-face 3
+                                           :faces [:punch :heal :shields :punches :shovel :skull]}}}
+                           :die-1)
+         [[:set-die-lock :die-1 false]])))

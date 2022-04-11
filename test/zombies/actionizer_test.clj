@@ -48,3 +48,7 @@
          [[:assoc-in [:dice :die-0 :roll-id] 1]
           [:assoc-in [:dice :die-0 :current-face] 0]
           [:assoc-in [:dice :die-0 :previous-face] 2]])))
+
+(deftest toggle-clamp
+  (is (= (sut/event->actions [:set-die-lock :die-0 true])
+         [[:assoc-in [:dice :die-0 :locked?] true]])))
